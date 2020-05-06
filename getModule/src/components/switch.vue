@@ -1,6 +1,6 @@
 <template>
     <span class="weui-switch" :class="{'weui-switch-on' : checked}"  @click="toggle()">
-      <div class="cash-switch" v-show="checked">CASH</div>
+        <div class="cash-switch" v-show="checked">CASH</div>
     </span>
 </template>
 
@@ -32,6 +32,10 @@ export default {
     background-color: #BBBBBB;
     transition: background-color 0.1s, border 0.1s;
     cursor: pointer;
+    /* 去掉点击后阴影部分*/
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }
 .weui-switch:before {
     content: " ";

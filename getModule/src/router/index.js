@@ -1,15 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import switchCheck from '@/components/switch'
-
+import datePicker from '../static/js/dataPicker'
 Vue.use(Router)
+Vue.use(datePicker)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'switch',
-      component: switchCheck
+      path: '/switch',
+      name: 'switch', 
+      components: {
+        "subPage": resolve => require(["../components/switch.vue"], resolve)
+      }
+    },{
+      path: '/list',
+      name: 'list', 
+      components: {
+        "subPage": resolve => require(["../components/list.vue"], resolve)
+      }
+    },{
+      path: '/timeControl',
+      name: 'timeControl', 
+      components: {
+        "subPage": resolve => require(["../components/timeControl.vue"], resolve)
+      }
     }
   ]
 })
