@@ -24,6 +24,12 @@ export default new Router({
       components: {
         "subPage": resolve => require(["../components/timeControl.vue"], resolve)
       }
+    },{
+      path: '/redPacket',
+      name: 'redPacket', 
+      components: {
+        "subPage": resolve => require(["../components/redPacket.vue"], resolve)
+      }
     }
   ]
 })
