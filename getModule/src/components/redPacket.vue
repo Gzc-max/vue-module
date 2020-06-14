@@ -1,11 +1,11 @@
 <template>
 	<div class="rainBox">
-		<div class="countDown" v-if="secondMask">
-			<img
-				class="second"
-				:src="'https://img.51fanbei.com/h5/app/activity/redRain_0'+second+'.png'"
-			>
-		</div>
+<!--		<div class="countDown" v-if="secondMask">-->
+<!--			<img-->
+<!--				class="second"-->
+<!--				:src="'https://img.51fanbei.com/h5/app/activity/redRain_0'+second+'.png'"-->
+<!--			>-->
+<!--		</div>-->
 		<div  v-if="!secondMask">
 			<div class="redNum">
 				<span class="icon">{{duration}}<i>s</i></span>
@@ -19,23 +19,23 @@
 						:data-index="index"
 						@webkitAnimationEnd="removeDom"
 						@click="tap(item)"
-                        :key="index"
+            :key="index"
 					>
 						<a href="javascript:;">
 							<i
 								:style="{ width:item.width, height:item.width,transform: item.transforms, webkitTransform: item.transforms}"
-								:class="[{ 'defaul':item.status==0},{'success':item.status==1},{'fail':item.status==2}]"
+								:class="[{ 'defaul':item.status==0},{'success':item.status==1},{'fail':item.status==2},{'defaul1':item.status==4}]"
 							></i>
 						</a>
 					</li>
 				</template>
 			</ul>
 		</div>
-        <div class="modalBox" v-if="isPrize">
-            <div class="container-box">
-                <div class="box-title">success</div>
-            </div>
+    <div class="modalBox" v-if="isPrize">
+        <div class="container-box">
+            <div class="box-title">success</div>
         </div>
+    </div>
 	</div>
 </template>
 
@@ -46,35 +46,25 @@ export default {
 	data() {
 		return {
 			second: 7, // 倒计时
-			secondMask: true, //倒计时弹层
+			secondMask: false, //倒计时弹层
 			liParams: [], // 红包数组
 			timer: null,
 			duration: 20, // 持续时间
 			selectedNum: 0, // 选中红包个数，不超过3个
 			clickNum: 0, // 点击的次数
 			randomNum: Math.ceil(Math.random() * 6), // 1~6
-            couponArr: [],
-            isPrize: false  //中奖弹框
+      couponArr: [],
+      isPrize: false  //中奖弹框
 		}
 	},
 	created() {
-		this.countDownFn();
+    this.startRedPacket();
+    this.countDownFn20();
 	},
-	methods: {
-		// 5秒倒计时
-		countDownFn() {
-			let self = this;
-			let timer = setInterval(() => {
-                if (self.second == 3) {
-                    self.secondMask = false;
-                    clearInterval(timer);
-                    self.startRedPacket();
-                    self.countDownFn20();
-                } else {
-                    self.second --;
-                }
-			}, 1000);
-		},
+  mounted() {
+
+  },
+  methods: {
 		// 20秒倒计时
 		countDownFn20(){
 			let self = this;
@@ -87,19 +77,19 @@ export default {
 			}, 1000);
 		},
 		tap(item){
-            console.log(item);
-            this.clickNum ++;
-            
-            console.log(this.randomNum + '--' + this.clickNum);
+      console.log(item);
+      this.randomNum = Math.ceil(Math.random() * 6);
+      this.clickNum ++;
+      console.log(this.randomNum + '--' + this.clickNum);
 			if(this.selectedNum >= 3 && item.status == 0){
-				item.status = 2;
-                //return false;
-		    }
+				item.status = 2;  // 0 默认 1 中奖 2 未中奖
+        //return false;
+      }
 
-		    if(this.clickNum == this.randomNum){
+			//点击次数小于6时，可能中奖，否则，无中奖可能
+      if(this.clickNum == this.randomNum){
 				if(item.status == 0 && this.selectedNum < 3){
-                    this.isPrize = true;
-					this.randomNum = Math.ceil(Math.random() * 6);
+				  this.isPrize = true;
 					this.clickNum = 0;
 					this.selectedNum ++;
 					item.status = 1;
@@ -122,12 +112,15 @@ export default {
 				left = (win - 130);
 			}
 
-			this.liParams.push({
+			//随机红包类型
+      let redPacketType = Math.random() > 0.5? 0 : 4;  //1为普通红包，4为分享红包
+      // console.log(redPacketType);
+      this.liParams.push({
 				left: left + 'px',
 				width: w + 'px',
 				transforms: 'rotate(' + rotate + ')',
 				durTime: durTime,
-				status: 0  // 0 默认 1 中奖 2 未中奖
+				status: redPacketType  // 0 默认 1 中奖 2 未中奖
 			});
 
 			setTimeout(() => {
@@ -139,7 +132,7 @@ export default {
 			// 红包密度
 			this.timer = setTimeout(() => {
 				this.startRedPacket();
-			}, 300);
+			}, 1000);
 		},
 		removeDom(e) {
 			let target = e.currentTarget;
@@ -201,9 +194,13 @@ export default {
 			height: 125px;
 			display: block;
 			&.defaul{
-				background: url(https://img.51fanbei.com/h5/app/activity/redRain_09.png) no-repeat center;
+				background: url(../assets/images/redPacket-a.png) no-repeat center;
 				background-size: 100% 100%;
 			}
+      &.defaul1{
+        background: url(../assets/images/redPacket-b.png) no-repeat center;
+        background-size: 100% 100%;
+      }
 			&.fail{
 				background: url(https://img.51fanbei.com/h5/app/activity/redRain_11.png) no-repeat center;
 				background-size: 100% 100%;
